@@ -3,7 +3,6 @@ const router = express.Router();
 const path = require('path');
 const Book = require('../models/book');
 const Author = require('../models/author');
-const { log } = require('console');
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', "image/jpg"];
 
 
@@ -141,7 +140,7 @@ async function renderFormPage(res, book, form, hasError = false) {
                 params.errorMessage = 'Error Updating Book';
             }
             else {
-                params.errorMessage = 'Error updating book';
+                params.errorMessage = 'Error Creating book';
             }
         }
         res.render(`books/${form}`, params);
@@ -152,7 +151,7 @@ async function renderFormPage(res, book, form, hasError = false) {
 }
 
 function saveCover(book, coverEncoded) {
-    if (coverEncoded == null) return;
+    if (coverEncoded == null || coverEncoded.length < 1) return;
     const cover = JSON.parse(coverEncoded);
     if (cover != null && imageMimeTypes.includes(cover.type)) {
         book.coverImage = new Buffer.from(cover.data, 'base64');
